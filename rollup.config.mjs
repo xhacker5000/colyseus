@@ -52,6 +52,12 @@ async function main() {
       return;
     }
 
+    var build_folder = path.join(basePath,'build');
+    if(fs.existsSync(build_folder)){
+      console.log(pkgJSON.name,'has been builded')
+      return;
+    }
+
     // Copy README.md and LICENSE into child package folder.
     if (!fs.existsSync(path.join(basePath, "README.md"))) {
       fs.copyFileSync(path.resolve(__dirname, "README.md"), path.join(basePath, "README.md"));
