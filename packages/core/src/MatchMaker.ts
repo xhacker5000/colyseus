@@ -61,7 +61,8 @@ export async function joinOrCreate(roomName: string, clientOptions: ClientOption
     let room = await findOneRoomAvailable(roomName, clientOptions);
 
     if (!room) {
-      room = await createRoom(roomName, clientOptions);
+      // room = await createRoom(roomName, clientOptions);
+      throw new SeatReservationError(`No room ava.`);
     }
 
     return await reserveSeatFor(room, clientOptions);

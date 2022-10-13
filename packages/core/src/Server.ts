@@ -76,23 +76,7 @@ export class Server {
      * Display deprecation warnings for moved Transport options.
      * TODO: Remove me on 0.15
      */
-    if (
-      options.pingInterval !== undefined ||
-      options.pingMaxRetries !== undefined ||
-      options.server !== undefined ||
-      options.verifyClient !== undefined
-    ) {
-      console.warn("DEPRECATION WARNING: 'pingInterval', 'pingMaxRetries', 'server', and 'verifyClient' Server options will be permanently moved to WebSocketTransport on v0.15");
-      console.warn(`new Server({
-  transport: new WebSocketTransport({
-    pingInterval: ...,
-    pingMaxRetries: ...,
-    server: ...,
-    verifyClient: ...
-  })
-})`);
-      console.warn("👉 Documentation: https://docs.colyseus.io/server/transport/")
-    }
+ 
 
     const transport = options.transport || this.getDefaultTransport(options);
     delete options.transport;
