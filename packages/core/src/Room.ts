@@ -353,10 +353,24 @@ export abstract class Room<State= any, Metadata= any> {
 
     } else {
       try {
-        client.auth = await this.onAuth(client, options, req);
+        
+        //client.auth = await this.onAuth(client, options, req);
+
+        //添加场景化处理
+        var auth_obj = await this.onAuth(client, options, req);
+        //如果返回的是对象
+        var auth_message = 'Auth Faild';
+        if(typeof auth_obj == "object"){
+          client.auth = auth_obj.auth;
+          auth_message = auth_obj.message;
+        }
+        else{
+          client.auth = auth_obj;
+        }
+        
 
         if (!client.auth) {
-          throw new ServerError(ErrorCode.AUTH_FAILED, 'onAuth failed');
+          throw new ServerError(ErrorCode.AUTH_FAILED, auth_message);
         }
 
         if (this.onJoin) {

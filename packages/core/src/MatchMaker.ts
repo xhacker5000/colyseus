@@ -58,14 +58,20 @@ export function setup(_presence?: Presence, _driver?: MatchMakerDriver, _process
  */
 export async function joinOrCreate(roomName: string, clientOptions: ClientOptions = {}) {
   return await retry<Promise<SeatReservation>>(async () => {
-    let room = await findOneRoomAvailable(roomName, clientOptions);
-
-    if (!room) {
-      // room = await createRoom(roomName, clientOptions);
-      throw new SeatReservationError(`No room ava.`);
+    if(clientOptions.roomId != undefined){
+      return await joinById(clientOptions.roomId,clientOptions)       
     }
+    else{
+      let room = await findOneRoomAvailable(roomName, clientOptions);
 
-    return await reserveSeatFor(room, clientOptions);
+      if (!room) {
+        // room = await createRoom(roomName, clientOptions);
+        throw new SeatReservationError(`No room ava.`);
+      }
+  
+      return await reserveSeatFor(room, clientOptions);
+    }
+  
   }, 5, [SeatReservationError]);
 }
 
@@ -147,7 +153,7 @@ export async function findOneRoomAvailable(roomName: string, clientOptions: Clie
     const roomQuery = driver.findOne({
       locked: false,
       name: roomName,
-      private: false,
+      private: false,      
       ...handler.getFilterOptions(clientOptions),
     });
 
